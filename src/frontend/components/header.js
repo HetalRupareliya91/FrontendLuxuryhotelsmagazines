@@ -25,7 +25,7 @@ function Header() {
 
   const handleLoginClick = () => {
     
-    setLoggedIn(!isLoggedIn);
+    navigate("/login")
   };
 
   const ClearUserDataFromLocalStorage = () => {

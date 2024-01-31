@@ -6,6 +6,7 @@ import pdf from '../../assets/pdf/lodge.pdf'
 import pdf2 from '../../assets/pdf/kashbah.pdf'
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaFacebook, FaFacebookMessenger, FaLinkedin, FaShareAlt, FaSnapchat, FaTelegram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import ShareThisButtons from "../components/shareButtons";
 function MagazineDetails (){
 
     return(
@@ -46,7 +47,8 @@ function MagazineDetails (){
                         </Col>
  </Row>
 
-<div class="sharethis-inline-share-buttons"></div>
+{/* <div class="sharethis-inline-share-buttons"></div> */}
+<ShareThisButtons/>
  
     </Container>
 </section>

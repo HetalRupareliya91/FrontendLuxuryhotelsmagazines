@@ -209,15 +209,15 @@ function Login() {
                               <div className="text-end mb-3">
                                  <a className="forgot-password" href="forgot-password">Forgot Password</a>
                               </div>
-                              {isLoggedIn ?(
+                              
                                                   <button type="submit" name="user_login_submit" className="auth_btn" onClick={handleLogin}>Log in</button>                          
 
-                              ):(
+                              
 
                               
-                              <button type="submit" name="user_login_submit" className="auth_btn" onClick={handleLogin}>Log in</button>                          
+                              {/* <button type="submit" name="user_login_submit" className="auth_btn" onClick={handleLogin}>Log in</button>                           */}
                                  
-                              )}
+                             
                                  <div className="footer_line mt-3">
                               <h6 id="loginErrorMessage" style={{ color: "red" }}></h6>
                                  <h6>Don't have an account? <a className="page_move_btn" href="/signup"  >Sign up</a></h6>
