@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import API from "../../../utils";
 import axios from "axios";
 
-function HotelDeleteAlert({ showModal, handleCloseModal ,hotel_id }){
+function HotelDeleteAlert({ showModal ,hotel_id ,handleCloseModal }){
+  const [isModalVisible, setModalVisible] = useState(showModal);
+
 
 
     const handleDeleteHotel = async (e) => {
@@ -23,7 +25,7 @@ function HotelDeleteAlert({ showModal, handleCloseModal ,hotel_id }){
               },
             }
           );
-            
+            console.log(response)
           if (response.status === 200) {
             // console.log(response.data);
             handleCloseModal();
@@ -35,6 +37,8 @@ function HotelDeleteAlert({ showModal, handleCloseModal ,hotel_id }){
         }
    
       };
+
+
     return(
 <Modal show={showModal} onHide={handleCloseModal}>
       <Modal.Header closeButton>

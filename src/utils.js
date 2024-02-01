@@ -23,7 +23,9 @@ const API = {
       upateHotels:"update-hotels",
       forgetPassword:"reset_password",
       varifyOtp:"verify_otp",
-      resendPassword:"resend_password"
+      resendPassword:"resend_password",
+      loginUserupdateProfile:"login-user-update-profile",
+      loginUserProfile:"login-user-profile"
       },
     }; 
 

@@ -5,7 +5,6 @@ import API from "../../../utils";
 import { EditorState, convertToRaw } from 'draft-js';
 import News1 from '../../../assets/img/news1.jpg'
 import News2 from '../../../assets/img/news2.jpg'
-import EditBlogModal from "./editNewsModal";
 import { useNavigate } from "react-router-dom";
 function AllBlogs() {
   const navigate = useNavigate();
@@ -106,16 +105,12 @@ function AllBlogs() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 
-  const [showEditModal, setShowEditModal] = useState(false);
 
-  const handleEditModal = (id) => {
-    setShowEditModal(!showEditModal);
-  };
 
   // Step 5: Trigger the modal to open when the "Edit" button is clicked
   const handleEditButtonClick = (news) => {
     setBlogId(news.id);  
-    handleEditModal(news.id);
+   
 
 
   };
@@ -245,16 +240,7 @@ function AllBlogs() {
         </div>
       </div>
 
-      <EditBlogModal
-        show={showEditModal}
-        handleClose={handleEditModal}
-        // handleEditSubmit={handleEditSubmit}
-        formData={formData}
-        news_id={blogId} 
-        handleInputChange={handleInputChange}
-        handleHotelEditorChange={handleHotelEditorChange}
-        handleOfferEditorChange={handleOfferEditorChange}
-      />
+   
     </>
   );
 }

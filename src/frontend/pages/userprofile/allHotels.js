@@ -6,9 +6,12 @@ import axios from "axios";
 import API from "../../../utils";
 import HotelDeleteAlert from "./hotelDeleteAlert";
 import { useNavigate } from "react-router-dom";
-import EditHotelModal from "./editHotelModal";
 
-function AllHotels(){
+function AllHotels( { onEditClick }){
+  
+  const [selectedHotel, setSelectedHotel] = useState(null);
+  const [showEditForm, setShowEditForm] = useState(false);
+
   const navigate = useNavigate();
   const [apiData, setApiData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -16,14 +19,16 @@ function AllHotels(){
   const [showModal, setShowModal] = useState(false);
   const[hotelId, setHotelId]=useState("")
 
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   const handleOpenModal = (hotel) => {
     setHotelId(hotel.id)
     setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+
   
 
   const fetchAllHotels = async () => {
@@ -77,36 +82,39 @@ function AllHotels(){
   //     console.error("Error:", error.message);
   //   }
   // };
-  const [showEditModal, setShowEditModal] = useState(false);
   const handleViewButtonClick = (hotel) => {
     // Navigate to the room-details page with the news id in the URL
     navigate(`/hotel-details/${hotel.id}/${hotel.country}/${hotel.hotel_title}`);
   };
 
-  const handleEditModal = (id) => {
-    setShowEditModal(!showEditModal);
-  };
 
-  // Step 5: Trigger the modal to open when the "Edit" button is clicked
-  const handleEditButtonClick = (hotel) => {
-    setHotelId(hotel.id);  
-    handleEditModal(hotel.id);
-
-
-  };
+  
   
   const formatDate = (dateString) => {
     const options = { weekday: 'long', hour: 'numeric', minute: 'numeric', second: 'numeric' };
     return new Date(dateString).toLocaleString(undefined, options);
   };
   
+  
+  const handleEditButtonClick = (hotel) => {
+    setSelectedHotel(hotel);
+    setShowEditForm(true);
+    onEditClick();
+
+    
+  };
+
+  const closeEditForm = () => {
+    setSelectedHotel(null);
+    setShowEditForm(false);
+  };
     return(
         <>
         {currentPosts.map((hotel) => (
-      <Row key={hotel.id} className='hotel-profile-div mt-4'>
+      <Row  className='hotel-profile-div mt-4'>
         <Col lg={4}>
           <div className='image-div'>
-            <Image src={News1} alt={`Hotel ${hotel.id}`} />
+            <Image src={News1} alt={`Hotel `} />
           </div>
         </Col>
 
@@ -126,7 +134,7 @@ function AllHotels(){
               <Col lg={4} className='mt-2'>
                 <div className='d-flex all-hotel-btns'>
                   <button className='me-1 btn-default' onClick={() => handleViewButtonClick(hotel)}>View</button>
-                  <button className='me-1 btn-default' onClick={() => handleEditButtonClick(hotel)}>Edit</button>
+                  <button className='me-1 btn-default' onClick={() => handleEditButtonClick(hotel)} >Edit</button>
                   <button className='me-1 btn-default' onClick={() => handleOpenModal(hotel)}>Delete</button>
                 </div>
               </Col>
@@ -134,7 +142,8 @@ function AllHotels(){
           </div>
         </Col>
       </Row>
-    ))}
+     ))} 
+    
     
       <div className="col-lg-12">
         <div className="room-pagination">
@@ -156,14 +165,10 @@ function AllHotels(){
       <HotelDeleteAlert
     hotel_id={hotelId} 
        showModal={showModal}
-       handleClose={handleEditModal}
+       handleCloseModal={handleCloseModal}
+     
       />
 
-      <EditHotelModal
-       show={showEditModal}
-       handleClose={showEditModal}
-       hotel_id={hotelId} 
-      />
       </>
     );
 }

@@ -162,6 +162,13 @@ function Login() {
    //    }
    //  }, [showOTPForm]);
   
+
+   useEffect(() => {
+      if (isUserLoggedIn()) {
+        navigate("/userprofile")
+        return;
+      }
+    }, []);
    
    return (
       <>

@@ -9,6 +9,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import hotelImage1 from "../../assets/img/hero/hero-1.jpg"
 import { Link } from "react-router-dom";
+import UserSidebar from "../components/sidebar";
 
 function EditHotel(){
     const [hotelEditorState, setHotelEditorState] = useState(EditorState.createEmpty());
@@ -278,11 +279,11 @@ function EditHotel(){
     
     return(
 <>
-<Header/>
 <section className="spad">
     <Container>
-
-        <div className="text-center">
+    
+            
+            <div className="text-center">
             <h1>
                 Update Hotel profile
             </h1>
@@ -293,9 +294,9 @@ function EditHotel(){
 {currentStep === 2 && <h4 className="stepform-heading">Hotel Contacts</h4>}
 {currentStep === 3 && <h4 className="stepform-heading">Special Offer</h4>}
 {currentStep === 4 && <h4 className="stepform-heading">Home Page Addon</h4>}
+<ProgressBar now={progress} label={`${progress}%`} className="ProgressBar h-25 mb-3" />
 
 </div>
-<ProgressBar now={progress} label={`${progress}%`} className="ProgressBar h-25 mb-3" />
         <Form>
 
             <div className="mb-3">
@@ -945,11 +946,14 @@ function EditHotel(){
 
         </Form>
    
+           
+       
+
+        
 
         </Container>
 </section>
 
-<Footer/>
 </>
     )
 }

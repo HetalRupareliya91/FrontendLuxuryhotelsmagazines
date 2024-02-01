@@ -6550,3 +6550,6 @@ span.readreview.Breakfast   , .Dinner   {
 .error-message{
 	color:red;
 }
+.modal-footer button{
+	border-radius: unset !important;
+}

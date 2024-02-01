@@ -8,6 +8,9 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { stateToHTML } from 'draft-js-export-html';
 
 function AddHotel() {
+
+
+    
     const [hotelEditorState, setHotelEditorState] = useState(EditorState.createEmpty());
     const [locationEditorState, setlocationEditorState] = useState(EditorState.createEmpty());
     const [roomsAndSuitesEditorState, setroomsAndSuitesEditorState] = useState(EditorState.createEmpty());
@@ -16,6 +19,7 @@ function AddHotel() {
     const [otherFacilitiesEditorState, setOtherFacilitiesEditorState] = useState(EditorState.createEmpty());
     const [additionalInformationEditorState, setAdditionalInformationEditorState] = useState(EditorState.createEmpty());
     const [descriptionEditorState, setDescriptionEditorState] = useState(EditorState.createEmpty());
+    const [aminitesData, setAminitesData]=useState("")
     // const [blogEditorState, setBlogEditorState] = useState(EditorState.createEmpty());
     const [currentStep, setCurrentStep] = useState(1);
 
@@ -306,6 +310,7 @@ function AddHotel() {
             const data = response.data;
             console.log('Amenities data:', data);
             if (data.status === true && Array.isArray(data.data)) {
+                setAminitesData(data)
                 setFormData((prevData) => ({
                     ...prevData,
                     amenitiesList: data.data,
@@ -382,48 +387,48 @@ function AddHotel() {
         }
 
         if (!formData.roomsAndSuites) {
-            newErrors.roomsAndSuites = "roomsAndSuites is required";
+            newErrors.roomsAndSuites = "Rooms And Suites is required";
             isValid = false;
         } else {
             newErrors.roomsAndSuites = "";
         }
 
         if (!formData.restaurantsAndBars) {
-            newErrors.restaurantsAndBars = "restaurantsAndBars is required";
+            newErrors.restaurantsAndBars = "Restaurants And Bars is required";
             isValid = false;
         } else {
             newErrors.restaurantsAndBars = "";
         }
 
         if (!formData.additionalInformation) {
-            newErrors.additionalInformation = "additionalInformation is required";
+            newErrors.additionalInformation = "Additional Information is required";
             isValid = false;
         } else {
             newErrors.additionalInformation = "";
         }
 
         if (!formData.spaAndWellness) {
-            newErrors.spaAndWellness = "spaAndWellness is required";
+            newErrors.spaAndWellness = "Spa And Wellness is required";
             isValid = false;
         } else {
             newErrors.spaAndWellness = "";
         }
         if (!formData.otherFacilities) {
-            newErrors.otherFacilities = "otherFacilities is required";
+            newErrors.otherFacilities = "Other Facilities is required";
             isValid = false;
         } else {
             newErrors.otherFacilities = "";
         }
 
         if (!formData.numberOfRooms) {
-            newErrors.numberOfRooms = "numberOfRooms is required";
+            newErrors.numberOfRooms = "Number Of Rooms is required";
             isValid = false;
         } else {
             newErrors.numberOfRooms = "";
         }
 
         if (!formData.numberOfRestaurants) {
-            newErrors.numberOfRestaurants = "number Of Restaurants is required";
+            newErrors.numberOfRestaurants = "Number Of Restaurants is required";
             isValid = false;
         } else {
             newErrors.numberOfRestaurants = "";
@@ -504,6 +509,57 @@ function AddHotel() {
         // Set initial progress when the component mounts
         setProgress((currentStep / 4) * 100);
     }, []);
+
+
+    const renderAmenitiesInputs = () => {
+        const numberInputs = [];
+        const checkboxInputs = [];
+    
+        formData.amenitiesList.forEach((amenity, index) => {
+            if (amenity.type === '2') {
+                numberInputs.push(
+                    <Col lg={3} md={4} key={index} className="mb-3">
+                        <input
+                            className="sidebar-input order-1"
+                            type="number"
+                            id={`amenityNumber_${index}`}
+                            name={amenity.title}
+                            placeholder={amenity.title}
+                            value={formData[amenity.title] || ''}
+                            onChange={handleInputChange}
+                            style={{ borderColor: validationErrors[amenity.title] ? 'red' : '' }}
+                        />
+                        {validationErrors[amenity.title] && (
+                            <div style={{ color: 'red', textAlign: 'left' }}>
+                                {validationErrors[amenity.title]}
+                            </div>
+                        )}
+                    </Col>
+                );
+            } else {
+                checkboxInputs.push(
+                    <Col lg={3} md={4} key={index} className="mb-3">
+                        <Form.Group className='d-flex order-2'>
+                            <Form.Check
+                                type="checkbox"
+                                id={`amenityCheckbox_${index}`}
+                                label={amenity.title}
+                                className='me-3'
+                            />
+                        </Form.Group>
+                        {validationErrors[amenity.title] && (
+                            <div style={{ color: 'red', textAlign: 'left' }}>
+                                {validationErrors[amenity.title]}
+                            </div>
+                        )}
+                    </Col>
+                );
+            }
+        });
+    
+        return [...numberInputs, ...checkboxInputs];
+    };
+    
 
     return (
         <>
@@ -751,243 +807,12 @@ function AddHotel() {
                         </Col>
                     </Row>
                     <h5>Hotel Amenities</h5>
+                   
                     <Row className="mb-3">
-                        <Col lg={3} md={4}>
-                            <input className="sidebar-input" type="number" id="numberOfRooms" name="numberOfRooms" placeholder="Number Of Rooms" value={formData.numberOfRooms} onChange={handleInputChange} style={{ borderColor: validationErrors.spaAndWellness ? "red" : "" }}
-                            />
-                            {validationErrors.numberOfRooms && (
-                                <div style={{ color: "red", textAlign: "left" }}>
-                                    {validationErrors.numberOfRooms}
-                                </div>
-                            )}
-                        </Col>
-
-                        <Col lg={3} md={4}>
-                            <input className="sidebar-input" type="number" id="numberOfRestaurants" name="numberOfRestaurants" placeholder="Number Of Restaurants" value={formData.numberOfRestaurants} onChange={handleInputChange}
-                                style={{ borderColor: validationErrors.numberOfRestaurants ? "red" : "" }}
-                            />
-                            {validationErrors.numberOfRestaurants && (
-                                <div style={{ color: "red", textAlign: "left" }}>
-                                    {validationErrors.numberOfRestaurants}
-                                </div>
-                            )}
-                        </Col>
-                        <Col lg={3} md={4}>
-                            <input className="sidebar-input" type="number" id="outdoorSwimmingPool" name="outdoorSwimmingPool" placeholder="Swimming Pool" value={formData.outdoorSwimmingPool} onChange={handleInputChange} style={{ borderColor: validationErrors.spaAndWellness ? "red" : "" }}
-                            />
-                            {validationErrors.outdoorSwimmingPool && (
-                                <div style={{ color: "red", textAlign: "left" }}>
-                                    {validationErrors.outdoorSwimmingPool}
-                                </div>
-                            )}
-
-                        </Col>
-
-                        <Col lg={3} md={4}>
-                            <input className="sidebar-input" type="number" id="bars" name="bars" placeholder="Bars" value={formData.bars} onChange={handleInputChange} style={{ borderColor: validationErrors.spaAndWellness ? "red" : "" }}
-                            />
-                            {validationErrors.bars && (
-                                <div style={{ color: "red", textAlign: "left" }}>
-                                    {validationErrors.bars}
-                                </div>
-                            )}
-                        </Col>
-                        <Col lg={3} md={4}>
-                            <input className="sidebar-input" type="number" id="meetingrooms" name="bars" placeholder="Meeting Rooms" value={formData.amenitiesList} onChange={handleInputChange} style={{ borderColor: validationErrors.amenitiesList ? "red" : "" }}
-                            />
-                            {validationErrors.amenitiesList && (
-                                <div style={{ color: "red", textAlign: "left" }}>
-                                    {validationErrors.amenitiesList}
-                                </div>
-                            )}
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Room service</label>
-                            </Form.Group>
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Concierge service</label>
-                            </Form.Group>
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Room service</label>
-                            </Form.Group>
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Concierge service</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Breakfast</label>
-                            </Form.Group>
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>WIFI</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Fitness center</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Concierge service</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Sport Classes</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Spa</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Toiletries</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Kids Club</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Spa</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Additional Classes</label>
-                            </Form.Group>
-                        </Col>
-
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Hair Dryer</label>
-                            </Form.Group>
-                        </Col>
-                        <Col lg={3} md={4} className="mb-3">
-                            <Form.Group className='d-flex' >
-                                <Form.Check
-                                    type="checkbox"
-
-                                    className=' me-3'
-
-                                />
-                                <label>Parking</label>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-
-
-
+                {renderAmenitiesInputs()}
+            </Row>
+                        
+                    
                     <Row className="mb-3">
                         <Col lg={3}>
                             <input className="sidebar-input" type="text" id="otherInformation1" name="otherInformation1" placeholder="Other Information (40 Characters Maximum)" value={formData.otherInformation1}
